@@ -1,0 +1,4 @@
+blog/migrations
+*sql
+blog/__pycache__/
+*pycache

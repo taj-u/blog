@@ -25,11 +25,7 @@ def post_list(request):
                'posts': posts}
     return render(request, 'blog/post/list.html', 
                   context)
-=======
-    return render(request, 'blog/post/list.html', 
-                  {'posts': posts})
->>>>>>> f1c023b9bed11fcbeed9eba783748719d9a64419
-            
+                  
 def post_detail(request, year, month, day, slug):
     post = get_object_or_404(Post, slug=slug,
         status='published',

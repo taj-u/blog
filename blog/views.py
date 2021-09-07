@@ -11,8 +11,7 @@ def index(request):
     return render(request, 'blog/base.html', )
 
 def post_list(request):
-    posts = Post.objects.all().filter(status='published')
-    
+    posts = Post.objects.all().filter(status='published')    
     object_list = Post.published.all()
     paginator = Paginator(object_list, 3)
     page = request.GET.get('page')
@@ -26,6 +25,10 @@ def post_list(request):
                'posts': posts}
     return render(request, 'blog/post/list.html', 
                   context)
+=======
+    return render(request, 'blog/post/list.html', 
+                  {'posts': posts})
+>>>>>>> f1c023b9bed11fcbeed9eba783748719d9a64419
             
 def post_detail(request, year, month, day, slug):
     post = get_object_or_404(Post, slug=slug,

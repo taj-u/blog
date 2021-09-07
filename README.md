@@ -1,2 +1,2 @@
 # blog
-The first first project using django3
+The first project using django3.

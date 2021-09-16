@@ -1,4 +1,4 @@
-blog/migrations
-*sql
+blog/migrations/
+db.*
 blog/__pycache__/*
 *pycache*

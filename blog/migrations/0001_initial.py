@@ -45,11 +45,7 @@ class Migration(migrations.Migration):
                 ('post', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='comments', to='blog.post')),
             ],
             options={
-<<<<<<< HEAD
                 'ordering': ('created',),
-=======
-                'ordering': ('-created',),
->>>>>>> f1c023b9bed11fcbeed9eba783748719d9a64419
             },
         ),
     ]

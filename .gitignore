@@ -1,4 +1,6 @@
 db.sqlite3
 blog/__pycache__/*
 blog/migraions/*
+django3_env
+
 

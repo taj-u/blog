@@ -8,7 +8,7 @@ from .forms import EmailPostForm, CommentForm
 
 # Create your views here.
 def index(request):
-    return render(request, 'blog/base.html')
+    return render(request, 'base.html')
 
 def post_list(request):
     posts = Post.objects.all().filter(status='published')    

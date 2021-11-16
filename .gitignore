@@ -1,6 +1,23 @@
 db.sqlite3
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*/__pycache__/
 */__pycache__/*
-*/migraions/*
+*.py[cod]
+*$py.class
 django3_env
+.DS_Store
+*.sqlite3
+media/
+*.pyc
+*.db
+*.pid
 
+*.log
+local_settings.py
+
+# Only for Development only
+**/migrations/**
+# !**/migrations
+# !**/migrations/__init__.py
 

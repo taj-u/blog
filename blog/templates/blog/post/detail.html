@@ -5,10 +5,11 @@
 <p>
     {{post.body | linebreaks}}
 </p>
-<p>Published at {{ post.created }} by {{ post.author }}
+<p>By <i>{{ post.author }}</i></p>
+<p>{{ post.created }}</p>
 {% comment %} post_id={{ post.id }} {% endcomment %}
 <p>
-<a href = "{% url "blog:post_share"  post.id %}">Share this post</a>
+<a href = "{% url 'blog:post_share'  post.id %}">Share this post</a>
 </p>
 
 {% with comments.count as total_comments %}

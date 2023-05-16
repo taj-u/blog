@@ -6,6 +6,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 django3_env
+django4-env
 .DS_Store
 *.sqlite3
 media/

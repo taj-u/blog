@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib import admin
 from django.urls import reverse
 
+from taggit.managers import TaggableManager
 class PublishedManager(models.Manager):
     def get_queryset(self):
         return super(PublishedManager, self).get_queryset()\
@@ -27,6 +28,7 @@ class Post(models.Model):
     status = models.CharField(max_length=10,
                               choices=STATUS_CHOICES,
                               default='draft')
+    tags = TaggableManager()
     objects = models.Manager()
     published = PublishedManager()
 
@@ -50,9 +52,9 @@ class Comment(models.Model):
     created = models.DateTimeField(auto_now_add = True)
     edited = models.DateTimeField(auto_now = True) 
     active = models.BooleanField(default = True)
-    
+
     class Meta:
-        ordering = ('created',)
+        ordering = ('-created',)
 
     def __str__(self):
         return f'comment by {self.name} on {self.post}'

@@ -6,13 +6,17 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import Post, Comment
 from .forms import EmailPostForm, CommentForm
 
+from taggit.models import Tag
 # Create your views here.
 def index(request):
     return render(request, 'base.html')
 
-def post_list(request):
-    posts = Post.objects.all().filter(status='published')    
+def post_list(request, tag_slug=None):
     object_list = Post.published.all()
+    tag = None
+    if tag_slug:
+        tag = get_object_or_404(Tag, slug=tag_slug)
+        object_list = object_list.filter(tags__in=[tag,])
     paginator = Paginator(object_list, 3)
     page = request.GET.get('page')
     try:
@@ -21,11 +25,13 @@ def post_list(request):
         posts = paginator.page(1)
     except EmptyPage:
         posts = paginator.page(paginator.num_pages)
-    context = {'page': page,
-               'posts': posts}
+    context = { 'page': page,
+                'posts': posts,
+                'tag': tag
+                }
     return render(request, 'blog/post/list.html', 
                   context)
-            
+
 def post_detail(request, year, month, day, slug):
     post = get_object_or_404(Post, slug=slug,
         status='published',

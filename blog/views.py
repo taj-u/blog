@@ -75,3 +75,11 @@ def post_share(request, post_id):
     return render(request, 'blog/post/share.html', {'post':post, 'form':form, 'sent':sent})
 
 
+def about(request):
+    return render(request, 'blog/about.html')
+
+
+def contact(request):
+    if request.method == 'POST':
+       return HttpResponse("Thank you. We'll reach you soon.")
+    return render(request, 'blog/contact.html')

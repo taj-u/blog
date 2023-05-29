@@ -5,8 +5,9 @@ __pycache__/
 */__pycache__/*
 *.py[cod]
 *$py.class
-django3_env
-django4-env
+env
+venv
+.env
 .DS_Store
 *.sqlite3
 media/

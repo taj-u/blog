@@ -154,4 +154,5 @@ CORS_ORIGIN_WHITELIST = [
 ]
 
 
+LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/'

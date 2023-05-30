@@ -1,39 +1,49 @@
 {% extends "base.html" %}
 {% block title %}{{post.title}}{% endblock %}
 {% block content %}
-<h1>{{post.title}}</h1>
-<p>
-    {{post.body | linebreaks}}
-</p>
-<p>By <i>{{ post.author }}</i></p>
-<p>{{ post.created }}</p>
-{% comment %} post_id={{ post.id }} {% endcomment %}
-<p>
-<a href = "{% url 'blog:post_share'  post.id %}">Share this post</a>
-</p>
 
-{% with comments.count as total_comments %}
-<h2>
-{{ total_comments }} comment{{ total_comments|pluralize }}
-</h2>
-{% endwith %}
-{% for comment in comments %}
-<div class='comment'>
-<p class='info'>
-{{ forloop.counter }} no. comment by {{ comment.name }}
-</p>
-{{ comment.body|linebreaks }}
-{% empty %}
-    <p>There are no comment yet.</p>
-{% endfor %}
-{% if  new_comment %}
-<h2>Your comment added successfully.</h1>
-{% else %}
-<h2>Add a comment</h2>
-{% endif %}
-<form method ='POST'>
-{% csrf_token %}
-{{ comment_form.as_p }}
-<p><input type="submit" class="btn btn-secondary" value="Add comment"></a></p>
-</form>
+    
+<div class="container-fluid">
+    <h3 class="text-info">{{post.title}}</h3>
+    <p>Author: <i>{{ post.author }}</i></p>
+    <p>{{ post.publish.date }}</p>
+    <p style="font-size: 40px;">
+        {{post.body | linebreaks}}
+    </p>
+
+    {% comment %} post_id={{ post.id }} {% endcomment %}
+    <p>
+    <a href = "{% url 'blog:post_share'  post.id %}">Share this post</a>
+    </p>
+
+    {% with comments.count as total_comments %}
+    <h4>
+    {{ total_comments }} comment{{ total_comments|pluralize }}
+    </h4>
+    {% endwith %}
+
+    {% if  new_comment %}
+    <h2>Your comment added successfully.</h1>
+    {% else %}
+    <h5>Add a comment</h5>
+    <form action="" class="form-group" method ='POST'>
+    {% csrf_token %}
+    {{ comment_form.as_p }}
+    <p><input type="submit" class="btn btn-secondary" value="Add comment"></p>
+    </form> 
+    {% endif %}
+
+    <div class='comments'>
+        <ul class="list-group">
+            {% for comment in comments %}
+            <li class="list-item">{{ comment.body|linebreaks }}</li>
+             {% empty %}
+            <p>There are no comment yet.</p>
+        </ul>
+    
+    {% endfor %}
+
+
+</div>
+
 {% endblock %}

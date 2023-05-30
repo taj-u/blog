@@ -1,6 +1,6 @@
 from django import forms
 from .models import Comment
-
+from django.http import request
 class EmailPostForm(forms.Form):
     name = forms.CharField(max_length = 31, label='Your name')
     email = forms.EmailField(label='Your email', widget=forms.TextInput(attrs={'placeholder': "john.doe@email.com"}))
@@ -10,4 +10,4 @@ class EmailPostForm(forms.Form):
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        fields = ('name', 'email', 'body')
+        fields = ('body',)

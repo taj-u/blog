@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.core.mail import send_mail
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.contrib.auth.decorators import login_required
 
 from .models import Post, Comment
 from .forms import EmailPostForm, CommentForm
@@ -32,6 +33,7 @@ def post_list(request, tag_slug=None):
     return render(request, 'blog/post/list.html', 
                   context)
 
+@login_required
 def post_detail(request, year, month, day, slug):
     post = get_object_or_404(Post, slug=slug,
         status='published',
@@ -46,7 +48,6 @@ def post_detail(request, year, month, day, slug):
             new_comment = comment_form.save(commit=False)
             new_comment.post = post
             new_comment.save()
-            return redirect('blog:post_list')
     else:
         comment_form = CommentForm()
     context = {

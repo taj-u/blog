@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Learn and Share{% endblock %}
+{% block title %}Discover,Learn, Change{% endblock %}
 {% block content %}
 {% if tag %}
 <h4>Posts tagged with <i>{{ tag.name }}</i></h4>
@@ -8,9 +8,9 @@
 <div class="card-group">
 {% for post in posts %}
 
-<div class="card" style="width: 24rem;">
+<div class="card container-fluid" style="width: 24rem;">
     <!-- <img src="..." class="card-img-top" alt="..."> -->
-    <div class="card-body">
+    <div class="card-body" style="border: 5px solid rgb(53, 111, 53); margin: 10px; border-radius: 10px;">
         <h4 class="card-title">
             <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
         </h4>
@@ -37,6 +37,6 @@
 
 {% endfor %}
 </div>
-
-{% include "pagination.html" with page=posts%}
+<div style="text-align: center;">{% include "pagination.html" with page=posts%}
+</div>
 {% endblock %}

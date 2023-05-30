@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.core.mail import send_mail
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
-
+from django.contrib.auth.models import User
 from .models import Post, Comment
 from .forms import EmailPostForm, CommentForm
 
@@ -18,7 +18,7 @@ def post_list(request, tag_slug=None):
     if tag_slug:
         tag = get_object_or_404(Tag, slug=tag_slug)
         object_list = object_list.filter(tags__in=[tag,])
-    paginator = Paginator(object_list, 3)
+    paginator = Paginator(object_list, 4)
     page = request.GET.get('page')
     try:
         posts = paginator.page(page)
@@ -84,3 +84,7 @@ def contact(request):
     if request.method == 'POST':
        return HttpResponse("Thank you. We'll reach you soon.")
     return render(request, 'blog/contact.html')
+
+
+def profile(request, user_id):
+    pass

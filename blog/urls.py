@@ -11,6 +11,6 @@ urlpatterns = [
     path('<int:post_id>/share', views.post_share, name='post_share'),
     path('about/', views.about, name='about'),
     path('contact', views.contact, name='contact'),
-
+    path('profile/<int:user_id>', views.profile, name='user_profile'),
 
 ]

@@ -4,10 +4,10 @@
 
     
 <div class="container-fluid">
-    <h3 class="text-info">{{post.title}}</h3>
+    <h3 class="text-info" style="padding-top: 20px;">{{post.title}}</h3>
     <p>Author: <i>{{ post.author }}</i></p>
-    <p>{{ post.publish.date }}</p>
-    <p style="font-size: 40px;">
+    <p style="margin-top: 0%;">{{ post.publish.date }}</p>
+    <p style="font-size: 24px;">
         {{post.body | linebreaks}}
     </p>
 
@@ -36,7 +36,8 @@
     <div class='comments'>
         <ul class="list-group">
             {% for comment in comments %}
-            <li class="list-item">{{ comment.body|linebreaks }}</li>
+            <li class="list-group-item">{{ comment.body|linebreaks }}</li>
+            <span>{{ comment.created }}</span>
              {% empty %}
             <p>There are no comment yet.</p>
         </ul>

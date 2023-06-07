@@ -1,10 +1,13 @@
 from django.db import models
 from django.utils import timezone
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AnonymousUser
 from django.contrib import admin
 from django.urls import reverse
 
+
 from taggit.managers import TaggableManager
+
+
 class PublishedManager(models.Manager):
     def get_queryset(self):
         return super(PublishedManager, self).get_queryset()\
@@ -20,7 +23,7 @@ class Post(models.Model):
                             unique_for_date='publish')
     author = models.ForeignKey(User,
                                on_delete=models.CASCADE,
-                               related_name='blog_posts')
+                               related_name='posts')
     body = models.TextField()
     publish = models.DateTimeField(default=timezone.now)
     created = models.DateTimeField(auto_now_add=True)
@@ -45,7 +48,15 @@ class Post(models.Model):
         return self.title
 
 class Comment(models.Model):
-    post = models.ForeignKey(Post, on_delete = models.CASCADE, related_name = 'comments')
+    user = models.ForeignKey(User,
+                            null=True,
+                            blank=True,
+                            default=None,
+                            on_delete=models.CASCADE,
+                            related_name='comments')
+    post = models.ForeignKey(Post,
+                            on_delete = models.CASCADE,
+                            related_name = 'comments')
     body = models.CharField(max_length=256)
     created = models.DateTimeField(auto_now_add = True)
     edited = models.DateTimeField(auto_now = True) 
@@ -55,4 +66,4 @@ class Comment(models.Model):
         ordering = ('-created',)
 
     def __str__(self):
-        return f'comment by {self.name} on {self.post}'
+        return f'{self.body} on {self.post}'

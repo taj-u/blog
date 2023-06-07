@@ -1,17 +1,18 @@
 {% extends 'base.html' %}
     {% block title %}
     {% if user %}
-        Wellcome, {{ user }}
+        Welcome, {{ user }}.
     {% else %}
-        Wellcome, AnonymousUser
+        Welcome, <i>AnonymousUser</i>.
     {% endif %}
     {% endblock title %}
 {% block content %}
     <h4>
         {% if user %}
-        Wellcome, {{ user }}
+        Welcome, {{ user }}
         {% else %}
-        Wellcome, AnonymousUser
+        Welcome, <i>AnonymousUser</i>.
+        <h6>You must log in or register to get the full features.</h6>
         {% endif %}
     </h4>
     <h3>Go to <a href= "{% url 'blog:index' %}">Blog site</a>

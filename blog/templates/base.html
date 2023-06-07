@@ -20,15 +20,15 @@
 
 <div id="content">
 {% block content %}
-<h4><a href="{% url 'blog:post_list' %}">List of blog posts</a></h4>
+{% if not user.is_authenticated %}
+<h4>You're not logged in. You can see the list of articles.</h4>
+<h5>But you must log in to read a article and to engage in comment box</h5>
+{% endif %}
+<h5><a href="{% url 'blog:post_list' %}">List of Articles</a></h5>
 {% endblock %}
 </div>
 
-<div id="sidebar">
-<h2>BrainWaveBlog</h2>
-<p>Where Ideas Take Flight</p>
-</div>
-
+{% include "sidebar.html" %}
 {% include "footer.html" %}
 
 </body>

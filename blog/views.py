@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.core.mail import send_mail
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
@@ -48,6 +48,8 @@ def post_detail(request, year, month, day, slug):
             new_comment = comment_form.save(commit=False)
             new_comment.post = post
             new_comment.save()
+            return redirect(post.get_absolute_url())
+
     else:
         comment_form = CommentForm()
     context = {

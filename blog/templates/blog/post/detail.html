@@ -2,49 +2,45 @@
 {% block title %}{{post.title}}{% endblock %}
 {% block content %}
 
-    
+
 <div class="container-fluid">
-    <h3 class="text-info" style="padding-top: 20px;">{{post.title}}</h3>
+    <h3>{{post.title}}</h3>
     <p>Author: <i>{{ post.author }}</i></p>
-    <p style="margin-top: 0%;">{{ post.publish.date }}</p>
-    <p style="font-size: 24px;">
-        {{post.body | linebreaks}}
-    </p>
+    <p>{{ post.publish.date }}</p>
+    <p>{{post.body | linebreaks}}</p>
 
     {% comment %} post_id={{ post.id }} {% endcomment %}
-    <p>
-    <a href = "{% url 'blog:post_share'  post.id %}">Share this post</a>
-    </p>
+    <p><a href="{% url 'blog:post_share'  post.id %}">Share this post</a></p>
 
     {% with comments.count as total_comments %}
-    <h4>
-    {{ total_comments }} comment{{ total_comments|pluralize }}
-    </h4>
+    {% if total_comments == 0 %}
+    <h4>No comment yet. Be the first to make a comment</h4>
+    {% else %}
+    <h4>{{ total_comments }} comment{{ total_comments|pluralize}}</h4>
+    {% endif %}
     {% endwith %}
 
-    {% if  new_comment %}
-    <h2>Your comment added successfully.</h1>
+    {% if new_comment %}
+    <h4>Your comment added successfully.</h4>
+    <h5>Make another comment</h5>
     {% else %}
-    <h5>Add a comment</h5>
-    <form action="" class="form-group" method ='POST'>
-    {% csrf_token %}
-    {{ comment_form.as_p }}
-    <p><input type="submit" class="btn btn-secondary" value="Add comment"></p>
-    </form> 
+    <h5>Make a comment</h5>
     {% endif %}
+    <form class="form-group" method='POST'>
+        {% csrf_token %}
+        {{ comment_form.as_p }}
+        <p><input type="submit" class="btn btn-secondary" value="Add comment"></p>
+    </form>
 
     <div class='comments'>
         <ul class="list-group">
             {% for comment in comments %}
             <li class="list-group-item">{{ comment.body|linebreaks }}</li>
-            <span>{{ comment.created }}</span>
-             {% empty %}
+            <!-- <span>{{ comment.created }}</span> <span>by comment.user.name</span> -->
+            {% empty %}
             <p>There are no comment yet.</p>
+            {% endfor %}
         </ul>
-    
-    {% endfor %}
+    </div>
 
-
-</div>
-
-{% endblock %}
+    {% endblock %}

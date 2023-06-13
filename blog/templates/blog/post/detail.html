@@ -5,8 +5,7 @@
 
 <div class="container-fluid">
     <h3>{{post.title}}</h3>
-    <p>Author: <i>{{ post.author }}</i></p>
-    <p>{{ post.publish.date }}</p>
+    <p> Published {{ post.publish.date }} by <i>{{ post.author }}</i></p>
     <p>{{post.body | linebreaks}}</p>
 
     {% comment %} post_id={{ post.id }} {% endcomment %}

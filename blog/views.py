@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from .models import Post, Comment
 from .forms import EmailPostForm, CommentForm
+from django.conf.global_settings import EMAIL_HOST_USER
 
 from taggit.models import Tag
 # Create your views here.
@@ -70,8 +71,8 @@ def post_share(request, post_id):
             subject = f"cd['name'] recommends you read "\
                       f"{post.title}"
             message = f"Read {post.title} at {post_url}\n\n"\
-                      f"{cd['name']}'s comments {cd['comments']}"
-            send_mail(subject, message, 'admin@admin.com', [cd['to']])
+                      f"{cd['name']}'s comments '{cd['comments']}'"
+            send_mail(subject, message, EMAIL_HOST_USER, [cd['to']])
             sent = True
     else:
         form = EmailPostForm()

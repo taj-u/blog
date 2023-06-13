@@ -10,12 +10,12 @@
 
 <div class="card container-fluid" style="width: 24rem;">
     <!-- <img src="..." class="card-img-top" alt="..."> -->
-    <div class="card-body" style="border: 5px solid rgb(53, 111, 53); margin: 10px; border-radius: 10px;">
+    <div class="card-body">
         <h4 class="card-title">
             <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
         </h4>
         <p class="card-subtitle">
-            Published at {{ post.publish.date }} By <i>{{ post.author }}</i>
+            Published {{ post.publish.date }} by <i>{{ post.author }}</i>
         </p>
 
         <div class="card-text justify-content-center">

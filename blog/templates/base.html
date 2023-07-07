@@ -14,7 +14,7 @@
     <title>{% block title %}Applying Knowledge, Changing Lives{% endblock %}</title>
 
 </head>
-<body>
+<body class="container">
 
 {% include "header.html" %}
 
@@ -22,7 +22,7 @@
 {% block content %}
 {% if not user.is_authenticated %}
 <h4>You're not logged in. You can see the list of articles.</h4>
-<h5>But you must log in to read a article and to engage in comment box</h5>
+<h5>You must log in to explore all features so you get full flavor</h5>
 {% endif %}
 <h5><a href="{% url 'blog:post_list' %}">List of Articles</a></h5>
 {% endblock %}

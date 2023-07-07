@@ -5,11 +5,12 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from .models import Post, Comment
-from .forms import EmailPostForm, CommentForm
+from .forms import EmailPostForm, CommentForm, ContactForm
 from django.conf.global_settings import EMAIL_HOST_USER
 
 from taggit.models import Tag
 # Create your views here.
+
 def index(request):
     return render(request, 'base.html')
 
@@ -48,9 +49,9 @@ def post_detail(request, year, month, day, slug):
         if comment_form.is_valid():
             new_comment = comment_form.save(commit=False)
             new_comment.post = post
+            new_comment.user = get_object_or_404(User, id=request.user.id)
             new_comment.save()
             return redirect(post.get_absolute_url())
-
     else:
         comment_form = CommentForm()
     context = {
@@ -68,26 +69,52 @@ def post_share(request, post_id):
         if form.is_valid():
             cd = form.cleaned_data
             post_url = request.build_absolute_uri(post.get_absolute_url())
-            subject = f"cd['name'] recommends you read "\
-                      f"{post.title}"
-            message = f"Read {post.title} at {post_url}\n\n"\
-                      f"{cd['name']}'s comments '{cd['comments']}'"
-            send_mail(subject, message, EMAIL_HOST_USER, [cd['to']])
+            subject = f"{cd['name']} recommends you read "\
+                      f"'{post.title}'"
+            sharer_comment = cd['comments']
+            message = f"Hello there. We hope this email finds you well. You might find this interesting and informative too as {cd['name']} finds.\n"\
+                        f"The link and Title of the post are below.\n\nThank you.\nBrainWaveBlog Team.\n\n"\
+                        f"Title: {post.title}\nLink: {post_url}\n\n"\
+                        f"And here's the comment of {cd['name']}({cd['email']}): '{sharer_comment}'\n"
+            send_mail(subject, message, EMAIL_HOST_USER, [cd['to']], fail_silently=False)
             sent = True
     else:
         form = EmailPostForm()
     return render(request, 'blog/post/share.html', {'post':post, 'form':form, 'sent':sent})
-
+ 
 
 def about(request):
     return render(request, 'blog/about.html')
 
 
 def contact(request):
+    sent = False
     if request.method == 'POST':
-       return HttpResponse("Thank you. We'll reach you soon.")
-    return render(request, 'blog/contact.html')
+        form = ContactForm(data=request.POST)
+        if form.is_valid():
+           cd = form.cleaned_data
+           contact_user_name = cd['name']
+           contact_user_email = cd['email']
+           contact_user_message = cd['message']
+           subject = f"BrainBlogWave: {contact_user_name}({contact_user_email}) wants to reach you out."
+           send_mail(subject=subject, message=contact_user_message, from_email=EMAIL_HOST_USER,recipient_list=['tajcsebsmrstu@gmail.com'])
+           sent = True
+    else:
+        form = ContactForm()
+    context = {'form':form,
+               'sent':sent}
+    return render(request, 'blog/contact.html', context=context)
 
 
 def profile(request, user_id):
-    pass
+    user = get_object_or_404(User, id = user_id)
+    posts = user.posts.all()
+    print(posts)
+    comments = user.comments.all()
+    print(comments)
+    context = {
+        'user':user,
+        'posts': posts,
+        'comments': comments
+    }
+    return render(request, 'blog/user_profile.html', context)

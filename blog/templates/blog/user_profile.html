@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}
+{{ user.username }}
+{% endblock %}
+
+{% block content %}
+<h3>Post/s created by <strong><i>{{ user.username }}</i></strong></h3>
+<ol>
+{% for post in posts %}
+<h4><li><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></li></h4>
+{% empty %}
+<h3>No post yet</h3>
+{% endfor %}
+</ol>
+{% include 'pagination.html' with page=posts %}
+<h3>Comment/s made by <strong><i>{{ user.username }}</i></strong></h3>
+<ol>
+{% for comment in comments %}
+<h4><li>Comment: {{ comment.body }}</li></h4>
+<h5>On post: <a href="{{ comment.post.get_absolute_url }}">{{ comment.post.title }}</a></h5>   
+{% empty %}
+<h3>No comment yet</h3>
+{% endfor %}
+</ol>
+{% include 'pagination.html' with page=comments %}
+{% endblock %}

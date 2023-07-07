@@ -101,9 +101,18 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # }
+
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    'ENGINE': 'django.db.backends.postgresql',
+    'NAME': 'postgres',
+    'USER': config('POSTGRES_DB_USER'),
+    'PASSWORD': config('POSTGRES_DB_PASSWORD'),
+    'HOST': 'localhost',
+    'PORT': '5432',
     }
 }
 
@@ -129,7 +138,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Email settings
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' # Backend for console
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' # Backend for SMTP
 
 EMAIL_USE_TLS = True  
 EMAIL_HOST = 'smtp.gmail.com'  

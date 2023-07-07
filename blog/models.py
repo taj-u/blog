@@ -66,4 +66,5 @@ class Comment(models.Model):
         ordering = ('-created',)
 
     def __str__(self):
-        return f'{self.body} on {self.post}'
+        return f'comment --> {self.body} \non the post --> {self.post}'
+    

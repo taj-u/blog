@@ -6,6 +6,10 @@
 <div class="container-fluid">
     <h3>{{post.title}}</h3>
     <p> Published {{ post.publish.date }} by <i>{{ post.author }}</i></p>
+    {% if request.user.id == post.author.id %}
+    <a href="#">Edit</a>
+    <a href="#">Delete</a>
+    {% endif %}
     <p>{{post.body | linebreaks}}</p>
 
     {% comment %} post_id={{ post.id }} {% endcomment %}
@@ -26,18 +30,31 @@
     <h5>Make a comment</h5>
     {% endif %}
     <form class="form-group" method='POST'>
-        {% csrf_token %}
         {{ comment_form.as_p }}
+        {% csrf_token %}
         <p><input type="submit" class="btn btn-secondary" value="Add comment"></p>
     </form>
 
     <div class='comments'>
         <ul class="list-group">
             {% for comment in comments %}
-            <li class="list-group-item">{{ comment.body|linebreaks }}</li>
-            <!-- <span>{{ comment.created }}</span> <span>by comment.user.name</span> -->
+            <li class="list-group-item">
+                <i style="color: blue;">
+                {% if comment.user %} <span><a href="{% url 'blog:user_profile' comment.user.id %}">{{ comment.user.username }}</a></span>
+                {% else %} <span style="color: chocolate;">Unknown user</span>
+                {% endif %}
+                </i>
+                <b>{{ comment.body|linebreaks }}</b>
+                <span>{{ comment.created }}</span>
+
+                {% if request.user.id == comment.user.id %}
+                <br>
+                <a href="#">Edit</a>
+                <a href="#">Delete</a>
+                {% endif %}
+            </li>
             {% empty %}
-            <p>There are no comment yet.</p>
+            <p>There is no comment yet.</p>
             {% endfor %}
         </ul>
     </div>

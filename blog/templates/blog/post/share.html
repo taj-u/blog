@@ -8,7 +8,7 @@
         <h1>Share <b>{{post.title}}</b> by e-mail</h1>
         <form method="post">
         {% if form.errors %}
-        <p style="color: #a93939">{{form.errors_}}</p>
+        <p style="color: #a93939">{{form.errors}}</p>
         {% endif %}
         {{form.as_p}}
         {% csrf_token %}

@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponse, HttpResponseRedirect
+# from django.http import HttpResponse, HttpResponseRedirect
 from django.core.mail import send_mail
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
@@ -9,10 +9,13 @@ from .forms import EmailPostForm, CommentForm, ContactForm
 from django.conf.global_settings import EMAIL_HOST_USER
 
 from taggit.models import Tag
-# Create your views here.
+from rest_framework import viewsets
+
+from .serializers import PostSerializer, CommentSerializer
 
 def index(request):
     return render(request, 'base.html')
+
 
 def post_list(request, tag_slug=None):
     object_list = Post.published.all()
@@ -34,6 +37,7 @@ def post_list(request, tag_slug=None):
                 }
     return render(request, 'blog/post/list.html', 
                   context)
+
 
 @login_required
 def post_detail(request, year, month, day, slug):
@@ -61,6 +65,7 @@ def post_detail(request, year, month, day, slug):
         'comment_form':comment_form}
     return render(request, 'blog/post/detail.html', context)
 
+@login_required
 def post_share(request, post_id):
     post = get_object_or_404(Post, id=post_id, status='published')
     sent = False
@@ -97,7 +102,7 @@ def contact(request):
            contact_user_email = cd['email']
            contact_user_message = cd['message']
            subject = f"BrainBlogWave: {contact_user_name}({contact_user_email}) wants to reach you out."
-           send_mail(subject=subject, message=contact_user_message, from_email=EMAIL_HOST_USER,recipient_list=['tajcsebsmrstu@gmail.com'])
+           send_mail(subject=subject, message=contact_user_message, from_email=EMAIL_HOST_USER,recipient_list=['tajcsebsmrstu@gmail.com'], fail_silently=False)
            sent = True
     else:
         form = ContactForm()
@@ -106,6 +111,7 @@ def contact(request):
     return render(request, 'blog/contact.html', context=context)
 
 
+@login_required
 def profile(request, user_id):
     user = get_object_or_404(User, id = user_id)
     posts = user.posts.all()
@@ -118,3 +124,13 @@ def profile(request, user_id):
         'comments': comments
     }
     return render(request, 'blog/user_profile.html', context)
+
+
+class PostViewSet(viewsets.ModelViewSet):
+    queryset = Post.published.all()
+    serializer_class = PostSerializer
+
+
+class CommentViewSet(viewsets.ModelViewSet):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer

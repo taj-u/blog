@@ -15,7 +15,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+
+from rest_framework.routers import DefaultRouter
+
 from . import views
+from blog.views import PostViewSet, CommentViewSet
+
+
+router = DefaultRouter()
+router.register(r'articles', PostViewSet)
+router.register(r'comments', CommentViewSet)
+
 
 urlpatterns = [
     path('', views.home_view),
@@ -23,5 +33,6 @@ urlpatterns = [
     path('blog/', include('blog.urls', namespace='blog'), name='blog'),
     path("accounts/", include("django.contrib.auth.urls"), name='auth'),
     path("accounts/register", views.register, name='register_user'),
-    
+    path("api/", include(router.urls)),
+    # path('api-auth', include('rest_framework.urls'))
 ]

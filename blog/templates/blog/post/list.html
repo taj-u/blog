@@ -6,37 +6,35 @@
 {% endif %}
 
 <div class="card-group">
-{% for post in posts %}
+    {% for post in posts %}
+    <div class="card container-fluid" style="width: 24rem;">
+        <!-- <img src="..." class="card-img-top" alt="..."> -->
+        <div class="card-body">
+            <h4 class="card-title">
+                <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+            </h4>
+            <p class="card-subtitle">
+                Published {{ post.publish.date }} by <i><a href="{% url 'blog:user_profile' post.author.id %}">{{ post.author }}</a></i>
+            </p>
 
-<div class="card container-fluid" style="width: 24rem;">
-    <!-- <img src="..." class="card-img-top" alt="..."> -->
-    <div class="card-body">
-        <h4 class="card-title">
-            <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
-        </h4>
-        <p class="card-subtitle">
-            Published {{ post.publish.date }} by <i>{{ post.author }}</i>
-        </p>
+            <div class="card-text justify-content-center">
+                {{ post.body|truncatewords:30|linebreaks }}
+            </div>
 
-        <div class="card-text justify-content-center">
-            {{ post.body|truncatewords:30|linebreaks }}
+            <a href="{{ post.get_absolute_url }}" class="btn btn-primary">Read more..</a>
+        
+            <p class="tex-info">Tags:
+                {% for tag in post.tags.all %}
+                <a href="{% url 'blog:post_list_by_tag' tag.slug %}">{{ tag.name }}</a>
+                {% if not forloop.last %}, {% endif %}
+                {% empty %} None
+                {% endfor %}
+            </p>
         </div>
-
-        <a href="{{ post.get_absolute_url }}" class="btn btn-primary">Read more..</a>
-    
-        <p class="tex-info">Tags:
-            {% for tag in post.tags.all %}
-            <a href="{% url 'blog:post_list_by_tag' tag.slug %}">{{ tag.name }}</a>
-            {% if not forloop.last %}, {% endif %}
-            {% empty %} <i>None</i>
-            {% endfor %}
-        </p>
     </div>
-
+    {% empty %}
+        <h3>There's no post yet published</h3>
+    {% endfor %}
 </div>
-
-{% endfor %}
-</div>
-<div style="text-align: center;">{% include "pagination.html" with page=posts %}
-</div>
+<div class="justify-content-center">{% include "pagination.html" with page=posts %}</div>
 {% endblock %}

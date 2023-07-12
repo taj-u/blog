@@ -9,7 +9,7 @@ class PostAdmin(admin.ModelAdmin):
     list_filter = ('status', 'created', 'author')
     search_fields = ('title', 'body')
     prepopulated_fields = {'slug': ('title',)}
-    ordering = ('status', 'publish')
+    ordering = ('status', '-publish')
 
 
 @admin.register(Comment)

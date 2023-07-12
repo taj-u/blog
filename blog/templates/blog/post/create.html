@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}Create a Post{% endblock %}
+{% block content %}
+{% if not created %}
+    <h3>Create a Post</h3>
+    <form method='post' action="{% url 'blog:post_create' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Create</button>
+    </form>
+{% else %}
+    <h3>Your post has been created successfully</h3>
+    <button><a href="{% url 'blog:post_create' %}">Create another post</a></button>
+    <p>Go to the link below to see the post detail:</p>
+    <a href="{% url 'post.get_absolute_url' %}"></a>
+{% endif %}
+{% endblock %}

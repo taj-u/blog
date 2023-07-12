@@ -1,11 +1,11 @@
 from django.shortcuts import render, get_object_or_404, redirect
-# from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.core.mail import send_mail
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from .models import Post, Comment
-from .forms import EmailPostForm, CommentForm, ContactForm
+from .forms import EmailPostForm, CommentForm, ContactForm, PostForm
 from django.conf.global_settings import EMAIL_HOST_USER
 
 from taggit.models import Tag
@@ -31,8 +31,7 @@ def post_list(request, tag_slug=None):
         posts = paginator.page(1)
     except EmptyPage:
         posts = paginator.page(paginator.num_pages)
-    context = { 'page': page,
-                'posts': posts,
+    context = { 'posts': posts,
                 'tag': tag
                 }
     return render(request, 'blog/post/list.html', 
@@ -88,6 +87,80 @@ def post_share(request, post_id):
     return render(request, 'blog/post/share.html', {'post':post, 'form':form, 'sent':sent})
  
 
+@login_required
+def post_create(request):
+    form = PostForm()
+    created = False
+    post = None
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            form.save()
+            created = True
+    return render(request, 'blog/post/create.html', {'form': form, 'created': created})
+
+
+@login_required
+def post_edit(request, post_id):
+    post = get_object_or_404(Post, pk=post_id)
+    if request.user.id == post.author.id:
+        form = PostForm(instance=post)
+        return render(request, 'blog/post/edit.html', {'form': form, 'post': post})
+    else:
+        return HttpResponse("<h3>You're not authorized to this action</h3>")
+
+
+@login_required
+def post_update(request, post_id):
+    post = get_object_or_404(Post, pk=post_id)
+    form = PostForm(request.POST, instance=post)
+    if form.is_valid():
+        form.save()
+        return redirect('blog:post_detail', year=post.publish.year,
+                                        month=post.publish.month,
+                                        day=post.publish.day, 
+                                        slug=post.slug)
+    return render(request, 'blog/post/edit.html', {'form': form, 'post': post})
+
+
+@login_required
+def post_delete(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    post.delete()
+    return redirect('blog:post_list')
+@login_required
+def comment_edit(request, comment_id):
+    comment = get_object_or_404(Comment, pk=comment_id)
+    if request.user.id == comment.user.id:
+        form = CommentForm(instance=comment)
+        return render(request, 'blog/comment_edit.html', {'form': form, 'comment': comment})
+
+
+@login_required
+def comment_update(request, comment_id):
+    comment = get_object_or_404(Comment, pk=comment_id)
+    form = CommentForm(request.POST, instance=comment)
+    if form.is_valid():
+        form.save()
+        return redirect('blog:post_detail', year=comment.post.publish.year,
+                                        month=comment.post.publish.month,
+                                        day=comment.post.publish.day, 
+                                        slug=comment.post.slug)
+    return render(request, 'blog/comment_edit.html', {'form': form, 'comment': comment})
+
+
+@login_required
+def comment_delete(request, comment_id):
+    comment = get_object_or_404(Comment, pk=comment_id)
+    post = comment.post
+    if request.user.id == comment.user.id:
+        comment.delete()
+        return redirect('blog:post_detail', year=comment.post.publish.year,
+                                        month=comment.post.publish.month,
+                                        day=comment.post.publish.day, 
+                                        slug=comment.post.slug)
+    
+
 def about(request):
     return render(request, 'blog/about.html')
 
@@ -101,7 +174,7 @@ def contact(request):
            contact_user_name = cd['name']
            contact_user_email = cd['email']
            contact_user_message = cd['message']
-           subject = f"BrainBlogWave: {contact_user_name}({contact_user_email}) wants to reach you out."
+           subject = f"BrainWaveBlog: {contact_user_name}({contact_user_email}) wants to reach you out."
            send_mail(subject=subject, message=contact_user_message, from_email=EMAIL_HOST_USER,recipient_list=['tajcsebsmrstu@gmail.com'], fail_silently=False)
            sent = True
     else:
@@ -115,9 +188,7 @@ def contact(request):
 def profile(request, user_id):
     user = get_object_or_404(User, id = user_id)
     posts = user.posts.all()
-    print(posts)
     comments = user.comments.all()
-    print(comments)
     context = {
         'user':user,
         'posts': posts,

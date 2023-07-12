@@ -4,23 +4,32 @@
 {% endblock %}
 
 {% block content %}
-<h3>Post/s created by <strong><i>{{ user.username }}</i></strong></h3>
+{% if request.user.id == user.id %}
+<a href="{% url 'blog:post_create' %}"><button style="background-color: chartreuse">Create a new Post</button></a>
+{% endif %}
+<h3>Post/s created by <strong><i><a href="{% url 'blog:user_profile' user.id %}">{{ user.username }}</a></i></strong></h3>
 <ol>
 {% for post in posts %}
-<h4><li><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></li></h4>
+<li><h4><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h4></li>
+<a href="{% url 'blog:post_edit'  post.id %}"><button style="background-color: lawngreen">Edit Post</button></a>
+<a href="{% url 'blog:post_delete'  post.id %}" onclick="return confirm('Are you sure you want to delete the post?')"><button style="background-color: orangered;">Delete Post</button></a>
 {% empty %}
 <h3>No post yet</h3>
 {% endfor %}
 </ol>
-{% include 'pagination.html' with page=posts %}
-<h3>Comment/s made by <strong><i>{{ user.username }}</i></strong></h3>
+<!-- {% include 'pagination.html' with page=posts %} -->
+<h3>Comment/s made by <strong><i><a href="{% url 'blog:user_profile' user.id %}">{{ user.username }}</a></i></strong></h3>
 <ol>
 {% for comment in comments %}
-<h4><li>Comment: {{ comment.body }}</li></h4>
+<li><h4>Comment: {{ comment.body }}</h4></li>
+{% if request.user.id == comment.user.id %}       
+<a href="{% url 'blog:comment_edit' comment.id %}">Edit</a>
+<a href="{% url 'blog:comment_delete' comment.id %}" onclick="return confirm('Are you sure you want to delete the comment?')">Delete</a>
+{% endif %}
 <h5>On post: <a href="{{ comment.post.get_absolute_url }}">{{ comment.post.title }}</a></h5>   
 {% empty %}
 <h3>No comment yet</h3>
 {% endfor %}
 </ol>
-{% include 'pagination.html' with page=comments %}
+<!-- {% include 'pagination.html' with page=comments %} -->
 {% endblock %}

@@ -33,6 +33,6 @@ urlpatterns = [
     path('blog/', include('blog.urls', namespace='blog'), name='blog'),
     path("accounts/", include("django.contrib.auth.urls"), name='auth'),
     path("accounts/register", views.register, name='register_user'),
-    path("api/", include(router.urls)),
-    # path('api-auth', include('rest_framework.urls'))
+    path("blog/api/", include(router.urls)),
+    path('api-auth', include('rest_framework.urls'))
 ]

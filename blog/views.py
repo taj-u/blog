@@ -76,7 +76,8 @@ def post_share(request, post_id):
             subject = f"{cd['name']} recommends you read "\
                       f"'{post.title}'"
             sharer_comment = cd['comments']
-            message = f"Hello there. We hope this email finds you well. You might find this interesting and informative too as {cd['name']} finds.\n"\
+            message = f"Hello there. We hope this email finds you well. You might find this \
+                interesting and informative too as {cd['name']} finds.\n"\
                         f"The link and Title of the post are below.\n\nThank you.\nBrainWaveBlog Team.\n\n"\
                         f"Title: {post.title}\nLink: {post_url}\n\n"\
                         f"And here's the comment of {cd['name']}({cd['email']}): '{sharer_comment}'\n"
@@ -128,6 +129,8 @@ def post_delete(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     post.delete()
     return redirect('blog:post_list')
+
+
 @login_required
 def comment_edit(request, comment_id):
     comment = get_object_or_404(Comment, pk=comment_id)
@@ -142,6 +145,7 @@ def comment_update(request, comment_id):
     form = CommentForm(request.POST, instance=comment)
     if form.is_valid():
         form.save()
+        # return redirect(request.META.get('HTTP_REFERER') or '/')
         return redirect('blog:post_detail', year=comment.post.publish.year,
                                         month=comment.post.publish.month,
                                         day=comment.post.publish.day, 

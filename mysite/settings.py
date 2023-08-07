@@ -113,7 +113,7 @@ DATABASES = {
 
     'default': {
     'ENGINE': 'django.db.backends.postgresql',
-    'NAME': 'postgres',
+    'NAME': 'brainwave',
     'USER': config('POSTGRES_DB_USER'),
     'PASSWORD': config('POSTGRES_DB_PASSWORD'),
     'HOST': 'localhost',

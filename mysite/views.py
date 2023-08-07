@@ -13,7 +13,7 @@ def register(request):
         if form.is_valid():
             user = form.save()  # Save the new user
             login(request, user)  # Log the user in
-            return redirect('blog:posts')  # Redirect to the home page or artile list
+            return redirect('blog:post_list')  # Redirect to the home page or artile list
     else:
         form = UserCreationForm()
     

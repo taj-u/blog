@@ -1,4 +1,4 @@
-# Modern Interactive *Blogging Site* web application 
+# BrainWave, Modern Interactive *Blogging Site* web application 
 
 This is one of my earlier web based projects. This is a dynamic *blog* application which is interactive and has some key features and Components.
 
